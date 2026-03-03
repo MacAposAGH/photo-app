@@ -37,7 +37,7 @@ public class Dao {
 
     public static Like findLikesByUserAndPhoto(long userId, long photoId) {
         String hql = """
-                select l from Like l where l.user.id = :id1 and l.photo.id = :id2 
+                select l from Like l where l.user.id = :id1 and l.photo.id = :id2
                 """;
         Query<Like> query = SESSION.createQuery(hql, Like.class);
         query.setParameter("id1", userId);
@@ -45,15 +45,24 @@ public class Dao {
         return query.uniqueResult();
     }
 
-    public static List<Like> findLikesByPhotoId(long id) {
+    public static List<User> findLikesUsersByPhotoId(long id) {
         String hql = """
-                select l from Like l where l.photo.id = :id
+                select l.user from Like l where l.photo.id = :id
                 """;
-        Query<Like> query = SESSION.createQuery(hql, Like.class);
+        Query<User> query = SESSION.createQuery(hql, User.class);
         query.setParameter("id", id);
         return query.list();
     }
 
+    public static Album findPhotosByAlbumId(long id) {
+        String hql = """
+                select a from Album a where a.id=:id
+                """;
+        Query<Album> query = SESSION.createQuery(hql, Album.class);
+        query.setParameter("id", id);
+        Album album = query.uniqueResult();
+        return album;
+    }
 
     public static <T> void delete(T entity) {
         Transaction transaction = SESSION.beginTransaction();

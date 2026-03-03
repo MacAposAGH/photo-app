@@ -31,6 +31,7 @@ public class Main {
         Dao.create(photo6);
         Dao.create(photo7);
         Dao.create(photo8);
+        Dao.create(photo9);
 
         Album album1 = new Album("album1", "description", Set.of(photo1, photo2));
         Album album2 = new Album("album2", "description", Set.of(photo3, photo4));
@@ -45,25 +46,26 @@ public class Main {
         User user2 = new User("Jane Doe", Set.of(album2, album3));
         User user3 = new User("Jack Doe", Set.of(album4));
         Dao.create(user1);
-//        Dao.create(user2);
-//        Dao.create(user3);
-//        user1.addFriend(user2);
-//        Dao.create(user1);
+        Dao.create(user2);
+        Dao.create(user3);
+        user1.addFriend(user2);
 
-        Like like = new Like();
+        /*
+        DON'T DELETE
+        user1.likePhoto(photo8);
+        user1.likePhoto(photo9);
+        user1.unlikePhoto(photo8);
+        Dao.deleteById(Photo.class, 9);
+         */
+
         user1.likePhoto(photo1);
+        user2.likePhoto(photo1);
+        user1.likePhoto(photo9);
         user1.unlikePhoto(photo1);
-//        photoTest2.addLike(user1); // useless
-//        Dao.create(user1);
-//        Dao.create(photoTest2);
 
-//        Dao.delete(user1);
-//        Dao.delete(photoTest1);
-
-//        album2.removePhoto(photoTest2);
-
-//        Dao.deleteById(Album.class, 2);
-
+        album1.removePhoto(photo1);
+        user1.removeAlbum(album1);
+        Dao.delete(user1);
 
 //        user1.printFriends();
 //        try {

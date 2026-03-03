@@ -35,20 +35,20 @@ public class Photo {
         this.date = date;
     }
 
-//    public void addLike(Like like) {
-//        Like like = new Like();
-//        like.setPhoto(this);
-//        like.setUser(user);
-//        likes.add(like);
-//        Dao.create(like);
-//    }
+    public void unlikePhoto(User user) {
+        Like like = Dao.findLikesByUserAndPhoto(user.getId(), id);
+        likes.remove(like);
+        like.setPhoto(null);
+        Dao.create(like);
+    }
 
-//    public void addLike(User user) {
-//        Like like = new Like();
-//        like.setPhoto(this);
-//        like.setUser(user);
-//        likes.add(like);
-//        Dao.create(like);
-//    }
+    public void likePhoto(User user) {
+        Like like = new Like();
+        like.setUser(user);
+        like.setPhoto(this);
+        likes.add(like);
+//        user.getLikes().add(like);  // ↑↓ both will throw: deleted object would be re-saved by cascade
+        Dao.create(like);
+    }
 
 }

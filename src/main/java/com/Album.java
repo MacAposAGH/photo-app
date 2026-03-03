@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,7 +27,7 @@ public class Album {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "album_id")
-    private Set<Photo> photos = new HashSet<>();
+    private List<Photo> photos = new ArrayList<>();
 
     public Album(String name, String description) {
         this.name = name;
@@ -36,7 +37,7 @@ public class Album {
     public Album(String name, String description, Set<Photo> photos) {
         this.name = name;
         this.description = description;
-        this.photos = new HashSet<>(photos);
+        this.photos = new ArrayList<>(photos);
     }
 
     public void addPhoto(Photo photo) {
@@ -44,14 +45,9 @@ public class Album {
     }
 
     public void removePhoto(Photo photo) {
+//        Dao.findLikesUsersByPhotoId(photo.getId()).forEach(user -> user.unlikePhoto(photo));
         photos.remove(photo);
         Dao.create(photo);
-//        Dao.findLikesByPhotoId(photo.getId()).forEach(
-//                like -> {
-////                    photo.removeLike(like);
-//                    like.getUser().unlikePhoto(like);
-//                }
-//        );
     }
 
 }

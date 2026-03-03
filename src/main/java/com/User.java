@@ -36,7 +36,7 @@ public class User {
     @ToString.Exclude
     private Set<Like> likes = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "friends",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -46,16 +46,22 @@ public class User {
 
     public User(String name, Set<Album> albums) {
         this.name = name;
-        this.albums = albums;
+        this.albums = new HashSet<>(albums);
     }
 
     public void addAlbum(Album album) {
         albums.add(album);
     }
 
+    public void removeAlbum(Album album) {
+        albums.remove(album);
+        Dao.create(album);
+    }
+
     public void addFriend(User user) {
         user.friends.add(this);
         friends.add(user);
+        Dao.create(this);
     }
 
     public void removeFriend(User user) {
@@ -63,9 +69,7 @@ public class User {
         Dao.create(this);
     }
 
-    public void likePhoto(
-            Photo photo
-    ) {
+    public void likePhoto(Photo photo) {
 //        friends.stream()
 //                .filter(friend -> friend.albums.stream()
 //                        .anyMatch(album -> album.getPhotos().contains(photo)))
@@ -74,18 +78,18 @@ public class User {
         Like like = new Like();
         like.setUser(this);
         like.setPhoto(photo);
-        likes.add(like);
+//        likes.add(like);
+        photo.getLikes().add(like);
+        // ↑↓ both will throw: deleted object would be re-saved by cascade - when trying to delete
+        // to which collection entity will be added will decide which parent deletion will delete child
         Dao.create(like);
     }
 
     public void unlikePhoto(Photo photo) {
         Like like = Dao.findLikesByUserAndPhoto(id, photo.getId());
-        likes.remove(like);
-//        photo.getLikes().remove(like);
-        like.setUser(null);
-//        like.setPhoto(null);
+        photo.getLikes().remove(like);
+        like.setPhoto(null);
         Dao.create(like);
-
     }
 
     public void printFriends() {
