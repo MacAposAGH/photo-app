@@ -4,9 +4,10 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.util.List;
+
 public class Dao {
-    private static final Session SESSION = HibernateUtil.getSessionFactory().openSession();
-    ;
+    public static final Session SESSION = HibernateUtil.getSessionFactory().openSession();
 
     public static <T> void create(T object) {
         Transaction transaction = SESSION.beginTransaction();
@@ -21,10 +22,46 @@ public class Dao {
         return query.uniqueResult();
     }
 
-    public static <T> void deleteById(Class<T> clazz, long id) {
-        T byId = findById(clazz, id);
+    public static User findUserByPhotoId(long id) {
+        String hql = """
+                select u
+                from User u
+                          join u.albums a
+                          join a.photos p
+                where p.id = :id
+                """;
+        Query<User> query = SESSION.createQuery(hql, User.class);
+        query.setParameter("id", id);
+        return query.uniqueResult();
+    }
+
+    public static Like findLikesByUserAndPhoto(long userId, long photoId) {
+        String hql = """
+                select l from Like l where l.user.id = :id1 and l.photo.id = :id2 
+                """;
+        Query<Like> query = SESSION.createQuery(hql, Like.class);
+        query.setParameter("id1", userId);
+        query.setParameter("id2", photoId);
+        return query.uniqueResult();
+    }
+
+    public static List<Like> findLikesByPhotoId(long id) {
+        String hql = """
+                select l from Like l where l.photo.id = :id
+                """;
+        Query<Like> query = SESSION.createQuery(hql, Like.class);
+        query.setParameter("id", id);
+        return query.list();
+    }
+
+
+    public static <T> void delete(T entity) {
         Transaction transaction = SESSION.beginTransaction();
-        SESSION.delete(byId);
+        SESSION.delete(entity);
         transaction.commit();
+    }
+
+    public static <T> void deleteById(Class<T> clazz, long id) {
+        delete(findById(clazz, id));
     }
 }

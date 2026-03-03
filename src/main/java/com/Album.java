@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -22,12 +24,9 @@ public class Album {
     @Column
     private String description;
 
-    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Photo> photos;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "album_id")
+    private Set<Photo> photos = new HashSet<>();
 
     public Album(String name, String description) {
         this.name = name;
@@ -37,11 +36,22 @@ public class Album {
     public Album(String name, String description, Set<Photo> photos) {
         this.name = name;
         this.description = description;
-        this.photos = photos;
+        this.photos = new HashSet<>(photos);
     }
 
     public void addPhoto(Photo photo) {
         photos.add(photo);
+    }
+
+    public void removePhoto(Photo photo) {
+        photos.remove(photo);
+        Dao.create(photo);
+//        Dao.findLikesByPhotoId(photo.getId()).forEach(
+//                like -> {
+////                    photo.removeLike(like);
+//                    like.getUser().unlikePhoto(like);
+//                }
+//        );
     }
 
 }

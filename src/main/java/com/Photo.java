@@ -24,11 +24,9 @@ public class Photo {
     @Column
     private LocalDate date;
 
-    @ManyToOne
-    @JoinColumn(name = "album_id", nullable = false)
-    private Album album;
-
-    @OneToMany(mappedBy = "photo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "photo",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     @ToString.Exclude
     private Set<Like> likes = new HashSet<>();
 
@@ -36,4 +34,21 @@ public class Photo {
         this.name = name;
         this.date = date;
     }
+
+//    public void addLike(Like like) {
+//        Like like = new Like();
+//        like.setPhoto(this);
+//        like.setUser(user);
+//        likes.add(like);
+//        Dao.create(like);
+//    }
+
+//    public void addLike(User user) {
+//        Like like = new Like();
+//        like.setPhoto(this);
+//        like.setUser(user);
+//        likes.add(like);
+//        Dao.create(like);
+//    }
+
 }

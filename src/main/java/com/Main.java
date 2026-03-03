@@ -1,68 +1,90 @@
 package com;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import java.time.LocalDate;
 import java.util.Set;
 
 public class Main {
 
-    static Session session;
-
-    public Main() {
-        session = HibernateUtil.getSessionFactory().openSession();
-    }
-
     public static void main(String[] args) {
+//        PhotoTest photoTest1 = new PhotoTest("photo1", LocalDate.now());
+//        PhotoTest photoTest2 = new PhotoTest("photo2", LocalDate.now());
+//        Dao.create(photoTest1);
+
+//        Album album1 = new Album("album1", "description", Set.of(photoTest1));
+//        Album album2 = new Album("album1", "description", Set.of(photoTest2));
+
         LocalDate today = LocalDate.now();
         Photo photo1 = new Photo("photo1", today.minusDays(1));
-        Photo photo2 = new Photo("photo2", today.minusDays(2));
-        Photo photo3 = new Photo("photo3", today.minusDays(3));
-        Photo photo4 = new Photo("photo4", today.minusDays(4));
-        Photo photo5 = new Photo("photo5", today.minusDays(4));
-        Photo photo6 = new Photo("photo6", today.minusDays(4));
+        Photo photo2 = new Photo("photo2", today.minusDays(1));
+        Photo photo3 = new Photo("photo3", today.minusDays(2));
+        Photo photo4 = new Photo("photo4", today.minusDays(2));
+        Photo photo5 = new Photo("photo5", today.minusDays(3));
+        Photo photo6 = new Photo("photo6", today.minusDays(3));
+        Photo photo7 = new Photo("photo7", today.minusDays(4));
+        Photo photo8 = new Photo("photo8", today.minusDays(4));
+        Photo photo9 = new Photo("photo9", today.minusDays(4));
         Dao.create(photo1);
         Dao.create(photo2);
         Dao.create(photo3);
         Dao.create(photo4);
         Dao.create(photo5);
         Dao.create(photo6);
+        Dao.create(photo7);
+        Dao.create(photo8);
 
-//        Album album1 = new Album("album1", "description");
-//        Album album2 = new Album("album2", "description", Set.of(photo3, photo4));
-//        Album album3 = new Album("album3", "description", Set.of(photo5, photo6));
-//        Dao.create(album1);
-//        Dao.create(album2);
-//        Dao.create(album3);
+        Album album1 = new Album("album1", "description", Set.of(photo1, photo2));
+        Album album2 = new Album("album2", "description", Set.of(photo3, photo4));
+        Album album3 = new Album("album3", "description", Set.of(photo5, photo6));
+        Album album4 = new Album("album4", "description", Set.of(photo7, photo8));
+        Dao.create(album1);
+        Dao.create(album2);
+        Dao.create(album3);
+        Dao.create(album4);
+
+        User user1 = new User("John Doe", Set.of(album1));
+        User user2 = new User("Jane Doe", Set.of(album2, album3));
+        User user3 = new User("Jack Doe", Set.of(album4));
+        Dao.create(user1);
+//        Dao.create(user2);
+//        Dao.create(user3);
+//        user1.addFriend(user2);
+//        Dao.create(user1);
+
+        Like like = new Like();
+        user1.likePhoto(photo1);
+        user1.unlikePhoto(photo1);
+//        photoTest2.addLike(user1); // useless
+//        Dao.create(user1);
+//        Dao.create(photoTest2);
+
+//        Dao.delete(user1);
+//        Dao.delete(photoTest1);
+
+//        album2.removePhoto(photoTest2);
+
+//        Dao.deleteById(Album.class, 2);
+
+
+//        user1.printFriends();
+//        try {
+//            System.out.println("\nUser can't like a photo of a user if they aren't friends.");
+//            user1.likePhoto(photo7);
+//        } catch (IllegalArgumentException exception) {
+//            System.out.println("-> " + exception.getMessage());
+//        }
 //
-//        User johnDoe = new User("John Doe", Set.of(album1, album2));
-////        User janeDoe = new User("Jane Doe");
-//        Dao.create(johnDoe);
-////        Dao.create(janeDoe);
+//        System.out.println("\nUser can only like a photo of a user if they are friends.");
+//        user1.likePhoto(photo5);
+//        user1.likePhoto(photo6);
+//        user1.printLikes();
 //
-////        Dao.deleteById(User.class, 2);
-////
-//        johnDoe.likePhoto(photo2);
-//
-//        Dao.deleteById(Like.class, 1);
-//        Like byId = Dao.findById(Like.class, 1);
-//        byId.setUser(null);
-//        byId.setPhoto(null);
-//        Dao.delete(byId);
+//        user1.unlikePhoto(Dao.findById(Like.class, 1));
+//        System.out.println("\nDeleting like won't affect other entities. After deletion:");
+//        user1.printLikes();
 
+//        Dao.deleteById(User.class, 1);
+//        Photo photo = Dao.findById(Photo.class, 6);
+//        album3.removePhoto(photo);
 
-//        Photo photoById = Dao.findById(Photo.class, 2);
-//        User userById = Dao.findById(User.class, 1);
-//        Set<Like> userLikes = userById.getLikes();
-//        Set<Like> photoLikes = userById.getLikes();
-
-    }
-
-    public static <T> void deleteById(Class<T> clazz, long id) {
-        T byId = Dao.findById(clazz, id);
-        Transaction transaction = session.beginTransaction();
-        session.delete(byId);
-        transaction.commit();
     }
 }
