@@ -22,13 +22,30 @@ public class Dao {
         return query.uniqueResult();
     }
 
+    public static List<User> findUsersByLikesUserId(long id) {
+        String hql = """
+                select u
+                from Like l
+                    join Photo p
+                    join Album a
+                    join User u where l.user.id=:id""";
+        Query<User> query = SESSION.createQuery(hql, User.class);
+        query.setParameter("id", id);
+        return query.list();
+    }
+
+    public static List<Photo> findLikesPhotosByUserId(long id) {
+        String hql = "select l.photo from Like l where l.user.id=:id";
+        Query<Photo> query = SESSION.createQuery(hql, Photo.class);
+        query.setParameter("id", id);
+        return query.list();
+    }
+
     public static User findUserByPhotoId(long id) {
         String hql = """
                 select u
                 from User u
-                          join u.albums a
-                          join a.photos p
-                where p.id = :id
+                         inner join u.albums a inner join a.photos p where p.id=:id
                 """;
         Query<User> query = SESSION.createQuery(hql, User.class);
         query.setParameter("id", id);

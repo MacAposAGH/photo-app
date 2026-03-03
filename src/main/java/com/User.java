@@ -8,6 +8,7 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -70,25 +71,22 @@ public class User {
     }
 
     public void likePhoto(Photo photo) {
-//        friends.stream()
-//                .filter(friend -> friend.albums.stream()
-//                        .anyMatch(album -> album.getPhotos().contains(photo)))
-//                .findFirst()
-//                .orElseThrow(() -> new IllegalArgumentException("You can't like photo of a user who is not your friend."));
+        friends.stream()
+                .filter(friend -> friend.albums.stream()
+                        .anyMatch(album -> album.getPhotos().contains(photo)))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("You can't like photo of a user who is not your friend."));
         Like like = new Like();
         like.setUser(this);
         like.setPhoto(photo);
-//        likes.add(like);
-        photo.getLikes().add(like);
-        // ↑↓ both will throw: deleted object would be re-saved by cascade - when trying to delete
-        // to which collection entity will be added will decide which parent deletion will delete child
+        likes.add(like);
         Dao.create(like);
     }
 
     public void unlikePhoto(Photo photo) {
         Like like = Dao.findLikesByUserAndPhoto(id, photo.getId());
-        photo.getLikes().remove(like);
-        like.setPhoto(null);
+        likes.remove(like);
+        like.setUser(null);
         Dao.create(like);
     }
 
@@ -97,13 +95,15 @@ public class User {
         friends.forEach(f -> System.out.printf("\t%s\n", f.getName()));
     }
 
-//    public void printLikes() {
-//        System.out.printf("%s likes:\n", name);
-//        likes.forEach(like -> {
-//            Photo photo = like.getPhoto();
-//            System.out.printf("\t%s of user %s\n", photo.getName(), Dao.findUserByPhotoId(photo.getId()).getName());
-//        });
-//    }
+    public void printLikes() {
+        System.out.printf("%s likes:\n", name);
+        likes.forEach(like -> {
+                    Photo photo = like.getPhoto();
+                    User user = Dao.findUserByPhotoId(photo.getId());
+                    System.out.printf("\t%s of user %s\n", photo.getName(),
+                            user == null ? "" : user.getName());
+                });
+    }
 
     @PrePersist
     public void prePersist() {
