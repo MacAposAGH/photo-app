@@ -54,6 +54,7 @@ public class Main {
         System.out.println("\nDeleting like won't affect other entities. After deletion:");
         user1.printLikes();
 
+
         album2.removePhoto(photo4);
         user1.removeAlbum(album1);
         Dao.delete(user1);

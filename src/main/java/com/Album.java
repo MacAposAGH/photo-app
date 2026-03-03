@@ -4,11 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
 
 @Data
 @NoArgsConstructor
@@ -29,19 +26,10 @@ public class Album {
     @JoinColumn(name = "album_id")
     private Set<Photo> photos = new HashSet<>();
 
-    public Album(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
-
     public Album(String name, String description, Set<Photo> photos) {
         this.name = name;
         this.description = description;
         this.photos = new HashSet<>(photos);
-    }
-
-    public void addPhoto(Photo photo) {
-        photos.add(photo);
     }
 
     public void removePhoto(Photo photo) {
