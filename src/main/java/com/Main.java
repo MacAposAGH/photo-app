@@ -58,6 +58,8 @@ public class Main {
         Dao.deleteById(Photo.class, 9);
          */
 
+//        This is main branch
+
         user1.likePhoto(photo1);
         user2.likePhoto(photo1);
         user1.likePhoto(photo9);
