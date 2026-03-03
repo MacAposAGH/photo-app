@@ -10,7 +10,13 @@
 		<property name="dialect">org.sqlite.hibernate.dialect.SQLiteDialect</property>
 		<property name="connection.driver_class">org.sqlite.JDBC</property>
 		<property name="connection.url">jdbc:sqlite:photo.db</property>
+		<property name="hibernate.hbm2ddl.auto">create-drop</property>
 		<property name="connection.username"></property>
 		<property name="connection.password"></property>
+
+		<mapping class="com.Album"/>
+		<mapping class="com.Photo"/>
+		<mapping class="com.User"/>
+		<mapping class="com.Like"/>
 	</session-factory>
 </hibernate-configuration>
