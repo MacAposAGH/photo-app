@@ -67,6 +67,7 @@ public class User {
     public void removeFriend(User user) {
         friends.remove(user);
         Dao.create(this);
+
     }
 
     public void likePhoto(Photo photo) {
