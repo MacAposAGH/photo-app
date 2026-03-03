@@ -24,9 +24,7 @@ public class Photo {
     @Column
     private LocalDate date;
 
-    @OneToMany(mappedBy = "photo",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+    @OneToMany(mappedBy = "photo", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private Set<Like> likes = new HashSet<>();
 

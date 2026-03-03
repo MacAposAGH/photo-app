@@ -58,7 +58,7 @@ public class Main {
         System.out.printf("""
                 \nDeleting photo will delete related likes. After deletion:
                 -> photo5: %s
-                """,  Dao.findById(Photo.class, 5));
+                """, Dao.findById(Photo.class, 5));
         user1.printLikes();
 
         user1.removeAlbum(album1);

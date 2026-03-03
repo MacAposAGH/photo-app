@@ -8,7 +8,6 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -31,9 +30,7 @@ public class User {
     @JoinColumn(name = "user_id")
     private Set<Album> albums = new HashSet<>();
 
-    @OneToMany(mappedBy = "user",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private Set<Like> likes = new HashSet<>();
 
@@ -96,18 +93,18 @@ public class User {
     }
 
     public void printLikes() {
-        if(likes.isEmpty()){
+        if (likes.isEmpty()) {
             System.out.printf("%s has no likes yet.\n", name);
             return;
         }
 
         System.out.printf("%s likes:\n", name);
         likes.forEach(like -> {
-                    Photo photo = like.getPhoto();
-                    User user = Dao.findUserByPhotoId(photo.getId());
-                    System.out.printf("\t%s of user %s\n", photo.getName(),
-                            user == null ? "" : user.getName());
-                });
+            Photo photo = like.getPhoto();
+            User user = Dao.findUserByPhotoId(photo.getId());
+            System.out.printf("\t%s of user %s\n", photo.getName(),
+                    user == null ? "" : user.getName());
+        });
     }
 
     @PrePersist
