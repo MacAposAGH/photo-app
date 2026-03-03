@@ -33,7 +33,7 @@ public class Album {
     }
 
     public void removePhoto(Photo photo) {
-//        Dao.findLikesUsersByPhotoId(photo.getId()).forEach(user -> user.unlikePhoto(photo));
+        Dao.findLikesUsersByPhotoId(photo.getId()).forEach(user -> user.unlikePhoto(photo));
         photos.remove(photo);
         Dao.create(photo);
     }

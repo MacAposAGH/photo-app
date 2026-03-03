@@ -96,6 +96,11 @@ public class User {
     }
 
     public void printLikes() {
+        if(likes.isEmpty()){
+            System.out.printf("%s has no likes yet.\n", name);
+            return;
+        }
+
         System.out.printf("%s likes:\n", name);
         likes.forEach(like -> {
                     Photo photo = like.getPhoto();
