@@ -50,16 +50,6 @@ public class Main {
         Dao.create(user3);
         user1.addFriend(user2);
 
-        /*
-        DON'T DELETE
-        user1.likePhoto(photo8);
-        user1.likePhoto(photo9);
-        user1.unlikePhoto(photo8);
-        Dao.deleteById(Photo.class, 9);
-         */
-
-//        This is main branch
-
         user1.likePhoto(photo1);
         user2.likePhoto(photo1);
         user1.likePhoto(photo9);
